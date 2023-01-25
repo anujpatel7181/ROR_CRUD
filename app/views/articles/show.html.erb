@@ -2,13 +2,47 @@
 
 <p><%= @article.body %></p>
 
-
-      <button><%= link_to "Back to Home Page", articles_path()%></button>
-
-
-      <button><%= link_to "Edit", edit_article_path(@article) %></button>
-  <button><%= link_to "Destroy", article_path(@article), data: {
+<ul>
+  <li><%= link_to "Edit", edit_article_path(@article) %></li>
+  <li><%= link_to "Destroy", article_path(@article), data: {
                     turbo_method: :delete,
                     turbo_confirm: "Are you sure?"
-                  } %></button>
-  </li>
+                  } %></li>
+  <li><%= link_to "Back to home page", root_path %></li>
+</ul>
+
+<h2>Comments</h2>
+<% @article.comments.each do |comment| %>
+  <% unless comment.archived? %>
+    <p>
+      <strong><%= comment.commenter %> : </strong> 
+      <%= comment.body %>
+   </p>
+   <p>
+    <%= link_to "Destroy Comment", [comment.article, comment], data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Are you sure?"
+                } %>
+  </p>
+  <% end %>
+<% end %>
+
+<h2>Add a comment:</h2>
+<%= form_with model: [ @article, @article.comments.build ] do |form| %>
+  <p>
+    <%= form.label :commenter %><br>
+    <%= form.text_field :commenter %>
+  </p>
+  <p>
+    <%= form.label :body %><br>
+    <%= form.text_area :body %>
+  </p>
+  <p>
+   <%= form.label :status %><br>
+    <%= form.select :status, ['public', 'private', 'archived'], selected: 'public' %>
+  </p>
+
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
