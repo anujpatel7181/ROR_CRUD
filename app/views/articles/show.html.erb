@@ -1,0 +1,14 @@
+<h1><%= @article.title %></h1>
+
+<p><%= @article.body %></p>
+
+
+      <button><%= link_to "Back to Home Page", articles_path()%></button>
+
+
+      <button><%= link_to "Edit", edit_article_path(@article) %></button>
+  <button><%= link_to "Destroy", article_path(@article), data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "Are you sure?"
+                  } %></button>
+  </li>
